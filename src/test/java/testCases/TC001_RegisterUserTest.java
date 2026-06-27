@@ -1,5 +1,6 @@
 package testCases;
 
+import Base.BaseClass;
 import Functions.NewToursCommonFunctions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -16,31 +17,9 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TC001_RegisterUserTest {
+public class TC001_RegisterUserTest extends BaseClass {
 
-    WebDriver driver;
 
-    @BeforeMethod
-    public void SetUp(){
-        ChromeOptions options = new ChromeOptions();
-
-        options.addArguments("--disable-notifications");
-        options.addArguments("--disable-popup-blocking");
-        options.addArguments("--disable-extensions");
-        options.addArguments("--disable-save-password-bubble");
-
-        Map<String, Object> prefs = new HashMap<>();
-        prefs.put("credentials_enable_service", false);
-        prefs.put("profile.password_manager_enabled", false);
-
-        options.setExperimentalOption("prefs", prefs);
-
-        driver = new ChromeDriver(options);
-        //driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-        driver.get("https://demo.guru99.com/test/newtours/index.php");
-    }
 
     @Test
     public void TCOO1(){
@@ -67,10 +46,7 @@ public class TC001_RegisterUserTest {
     }
 
 
-    @AfterMethod
-    public void CloseBrowser(){
-        driver.quit();
-    }
+
 
 
     //    public void registerUser(){
