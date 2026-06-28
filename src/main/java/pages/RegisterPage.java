@@ -1,12 +1,12 @@
 package pages;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
-public class RegisterPage {
+
+public class RegisterPage  {
 
     WebDriver driver;
 
@@ -78,8 +78,19 @@ public class RegisterPage {
     public WebElement submitBtn_ele;
 
     public void clickSubmitBtn(){
+        removePopup();
         submitBtn_ele.click();
     }
 
 
+    public void removePopup() {
+
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+
+        js.executeScript("""
+            document.querySelectorAll(
+                '.cb-box__wrapper-center_modal,.cb-box__inner-drag,.cb-element__wrap'
+                ).forEach(e => e.remove());
+            """);
+    }
 }

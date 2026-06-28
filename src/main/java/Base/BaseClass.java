@@ -10,35 +10,40 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.internal.BaseClassFinder;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 
 public class BaseClass  {
 
     public WebDriver driver;
 
     @BeforeMethod
-    public void SetUp(){
-        ChromeOptions options = new ChromeOptions();
+    public void SetUp() throws IOException {
 
-        options.addArguments("--disable-notifications");
-        options.addArguments("--disable-popup-blocking");
-        options.addArguments("--disable-extensions");
-        options.addArguments("--disable-save-password-bubble");
+        FileInputStream fileInputStream = new FileInputStream(System.getProperty("user.dir")+
+                "\\src\\test\\resources\\config.properties");
 
-        Map<String, Object> prefs = new HashMap<>();
-        prefs.put("credentials_enable_service", false);
-        prefs.put("profile.password_manager_enabled", false);
+        Properties properties = new Properties();
+        properties.load(fileInputStream);
 
-        options.setExperimentalOption("prefs", prefs);
-
-        String browser = "Chrome";
+        String browser = properties.getProperty("browser");
 
         switch (browser.toLowerCase()){
             case "chrome" :
                 driver = new ChromeDriver(); break;
+
+//                ChromeOptions options = new ChromeOptions();
+//                options.addArguments("user-data-dir=C:\\Users\\LENOVO\\AppData\\Local\\Google\\Chrome\\User Data");
+//                options.addArguments("profile-directory=Default");
+//                driver = new ChromeDriver(options);
+//                break;
+            
             case "edge" :
                 driver = new EdgeDriver(); break;
             case "firefox" :
@@ -48,8 +53,15 @@ public class BaseClass  {
         }
 
         driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        driver.get("https://demo.guru99.com/test/newtours/index.php");
+
+        //String implicit_wait = properties.getProperty("implicit_wait");
+        //long imp_wait = Long.parseLong(implicit_wait);
+
+        driver.manage().timeouts().
+                implicitlyWait(Duration.ofSeconds
+                (Long.parseLong(properties.getProperty("implicit_wait"))));
+
+        driver.get(properties.getProperty("App_URL"));
 
 
     }
